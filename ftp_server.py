@@ -22,16 +22,15 @@ def upload():
 	print(f"file name is: {file_name}\n")
 
 	with open(f'/home/leonhard/cyber/{file_name}', 'wb+') as f:
-		#data = client_socket.recv(SIZE)
 
 		while True:
-			#f.write(data)
+			
 			data = client_socket.recv(SIZE)
 			f.write(data)
 			if not data:
 				print("finishing")
 				break
-			#f.write(data)		
+
 		print("😎 Done\n")
 	#func_selector()
 	return

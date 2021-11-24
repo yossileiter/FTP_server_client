@@ -14,7 +14,6 @@ FORMAT = "utf-8"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def connect():
-	#s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((IP, PORT))
 	print("\n\n✅ connection successful")
 	sleep(1)
@@ -31,8 +30,7 @@ def upload(file_name):
 			
 			if not data:
 				s.close()
-			#	connect()
-			#	#s.send('')
+			
 				print("break")
 				break
 		   
