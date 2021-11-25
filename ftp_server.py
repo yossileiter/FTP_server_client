@@ -5,6 +5,7 @@ import sys
 import time
 import os
 
+
 IP = '0.0.0.0'
 PORT = 33333
 SIZE = 1024
@@ -13,7 +14,12 @@ FORMAT = "utf-8"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("", PORT))
 s.listen()
+
 print('📞 Start listening\n')
+client_socket, address = s.accept()
+
+#print('📞 Start listening\n')
+print(f'🌍 {address} is connected\n')
 
 
 def download():
@@ -32,7 +38,6 @@ def download():
 				break
 
 
-
 def upload():
 	file_name = client_socket.recv(SIZE).decode()
 	file_name = file_name.split('/')[-1]
@@ -44,25 +49,26 @@ def upload():
 			
 			data = client_socket.recv(SIZE)
 			f.write(data)
-			if not data:
-				print("finishing")
+			if data == b"stop":
 				break
 
 		print("😎 Done\n")
-	#func_selector()
+	func_selector()
 	return
 
 def file_list():
-	print("Collect data...")
+
+	print("Collect data...\n")
 	data = str(os.listdir())
-	print(data)
-	#client_socket.sendall(data)
 	client_socket.sendall(data.encode())
+
 	print("😎 Done\n")
+	func_selector()
 
 def func_selector():
+	print("💪 Ready for commands\n")
 	command = client_socket.recv(SIZE).decode()
-	print("the command is: ", command)
+	print("the command is: ", command, "\n")
 	if command == "upload":
 		upload()
 	elif command == "download":
@@ -72,10 +78,7 @@ def func_selector():
 	else:
 		exit()
 
-if __name__ =="__main__":
-	while True:
-		client_socket, address = s.accept()               
-		print(f'[!] {address} is connected')	
-		func_selector()
+if __name__ =="__main__":               
+	func_selector()
 
 

@@ -19,36 +19,33 @@ def connect():
 	sleep(1)
 
 def download(file_name):
-	print(f"Start Downloading {file_name}\n")
+	print(f"\nDownloading {file_name}...\n")
 	s.send(file_name.encode()) 
 
 	with open(f'/home/leonhard/cyber/recv.{file_name}', 'wb+') as f:
 
 		while True:
-			
 			data = s.recv(SIZE)
 			f.write(data)
 			if not data:
-				print("finishing")
+				s.close()
+				print("File accepted")
 				break
+	func_selector()
+	return
 
 def upload(file_name):
 	print("srart uploading")
 	s.send(file_name.encode())
 	with open(file_name, 'rb') as f:
 
-		while True:
-			data = f.read(SIZE)
-			s.send(data)
-			if not data:
-				s.close()
-			
-				print("break")
-				break
-		   
+		#while True:
+		data = f.read()
+		s.sendall(data)
+	sleep(2)
+	s.sendall(b"stop")
 	print("😎 successful\n")
-	func_selector()			
-	return
+
 
 
 def list_files():
