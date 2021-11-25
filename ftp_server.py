@@ -3,7 +3,7 @@
 import socket
 import sys
 import time
-
+import os
 
 IP = '0.0.0.0'
 PORT = 33333
@@ -13,7 +13,24 @@ FORMAT = "utf-8"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("", PORT))
 s.listen()
-print(f'starting up on {IP}, port {PORT}')
+print('📞 Start listening\n')
+
+
+def download():
+	file_name = client_socket.recv(SIZE).decode()
+	print(f"file name is: {file_name}\n")
+	print("Sending...\n")
+	with open(f'/home/leonhard/cyber/{file_name}', 'rb') as f:
+
+		while True:
+			data = f.read(SIZE)
+			client_socket.sendall(data)
+			
+			if not data:
+				client_socket.close()
+				print("break")
+				break
+
 
 
 def upload():
@@ -35,12 +52,25 @@ def upload():
 	#func_selector()
 	return
 
+def file_list():
+	print("Collect data...")
+	data = str(os.listdir())
+	print(data)
+	#client_socket.sendall(data)
+	client_socket.sendall(data.encode())
+	print("😎 Done\n")
+
 def func_selector():
 	command = client_socket.recv(SIZE).decode()
 	print("the command is: ", command)
 	if command == "upload":
 		upload()
-	
+	elif command == "download":
+		download()
+	elif command == "list":
+		file_list()
+	else:
+		exit()
 
 if __name__ =="__main__":
 	while True:
